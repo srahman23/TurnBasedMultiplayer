@@ -20,12 +20,17 @@ public class MapMaker : MonoBehaviour
     public int mapLength;
     
     PathFinding pathfinding;
-    Lakes[] lakes; 
+    Lakes[] lakes;
+
+    RandomGen lakePieces = new RandomGen(15, 25);
+    RandomGen lakeXCoord = new RandomGen(10, 40);
+    RandomGen lakeZCoord = new RandomGen(10, 40);
+    RandomGen lakeLength = new RandomGen(2, 5);
+    RandomGen lakeWidth = new RandomGen(2, 5);
     
     void Awake()
     {
         pathfinding = GetComponent<PathFinding>();
-
     }
     // Use this for initialization
     void Start()
@@ -40,6 +45,10 @@ public class MapMaker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Ray ray = new Ray(pos)
+        }
         playerNode = NodefromWorldPosition(player.transform.position);
     }
     void AssignGrid()
@@ -55,26 +64,27 @@ public class MapMaker : MonoBehaviour
     }
     void GenerateLakes()
     {
-        /*lakes = new Lakes[1];
-        lakes[0] = new Lakes();
-        lakes[0].SetUpLakes(1, 0, 3 , 3);
+        lakes = new Lakes[lakePieces.Randomize];
+        print(lakes.Length);
 
-        for(int x = 0; x<lakes[0].lakeLength; x++)
+        for (int i = 0; i < lakes.Length; i++)
         {
-            int xCoord = lakes[0].xPos +x;
+            lakes[i] = new Lakes();
+            lakes[i].SetUpLakes(lakeXCoord.Randomize, lakeZCoord.Randomize, lakeLength.Randomize, lakeWidth.Randomize);
 
-            for(int z = 0; z<lakes[0].lakeHeight; z++)
+            for (int x = 0; x < lakes[i].lakeLength; x++)
             {
-                int zCoord = lakes[0].zPos + z;
-                grid[xCoord, zCoord].walkable = false;
+                int xCoord = lakes[i].xPos + x;
+
+                for (int z = 0; z < lakes[i].lakeHeight; z++)
+                {
+                    int zCoord = lakes[i].zPos + z;
+                    grid[xCoord, zCoord].walkable = false;
+                }
             }
         }
-        */
-        grid[2, 4].walkable = false;
-        grid[2, 3].walkable = false;
-        grid[2, 2].walkable = false;
-        grid[2, 1].walkable = false; 
-        }
+        print("Done");
+    }
     void CreatePathfindingMap()
     {
         grid = new Node[mapLength, mapHeight];
@@ -88,9 +98,7 @@ public class MapMaker : MonoBehaviour
                 grid[x, y] = new Node(true, NodePosition);
                 grid[x, y].xPos = x;
                 grid[x, y].yPos = y;
-                //Sets the position of each node within the grid system. MAKE SURE IT IS THE SAME AS THE TILE CREATION.
-                                  
-                          
+                //Sets the position of each node within the grid system. MAKE SURE IT IS THE SAME AS THE TILE CREATION.                                                            
             }
         }
         foreach(Node n in grid)
@@ -99,8 +107,7 @@ public class MapMaker : MonoBehaviour
             {
                 if (path.Contains(n))
                 {
-                    n.walkable = false;
-                    
+                    n.walkable = false;                    
                 }
             }
         }

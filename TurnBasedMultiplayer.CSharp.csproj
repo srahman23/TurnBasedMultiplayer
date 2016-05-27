@@ -83,6 +83,7 @@
     <Compile Include="Assets\Node.cs" />
     <Compile Include="Assets\PathFinding.cs" />
     <Compile Include="Assets\PathRequest.cs" />
+    <Compile Include="Assets\RandomGen.cs" />
     <Compile Include="Assets\UnitMovement.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
