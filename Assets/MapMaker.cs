@@ -10,10 +10,14 @@ public class MapMaker : MonoBehaviour
     public GameObject[] floortype;
     public TileType[][] tiles;
     public GameObject player;
+    public GameObject target;
     public Node playerNode;
+    public Node targetNode;
     public List<Node> path;
     public bool finished = false;
+    public bool clicked = false;
     public Node[,] grid;
+    public Vector3 blag;
     Vector3 position;
 
     public int mapHeight;
@@ -22,9 +26,9 @@ public class MapMaker : MonoBehaviour
     PathFinding pathfinding;
     Lakes[] lakes;
 
-    RandomGen lakePieces = new RandomGen(15, 25);
-    RandomGen lakeXCoord = new RandomGen(10, 40);
-    RandomGen lakeZCoord = new RandomGen(10, 40);
+    RandomGen lakePieces = new RandomGen(20, 30);
+    RandomGen lakeXCoord = new RandomGen(10, 45);
+    RandomGen lakeZCoord = new RandomGen(10, 45);
     RandomGen lakeLength = new RandomGen(2, 5);
     RandomGen lakeWidth = new RandomGen(2, 5);
     
@@ -41,16 +45,18 @@ public class MapMaker : MonoBehaviour
         CreateGrid();
         GetNeighbours();
         finished = true;
+
     }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Ray ray = new Ray(pos)
-        }
-        playerNode = NodefromWorldPosition(player.transform.position);
+       print(target.transform.position);
+       playerNode = NodefromWorldPosition(player.transform.position);
+       targetNode = NodefromWorldPosition(target.transform.position);
+       print(targetNode.nodeVector);
+       blag = targetNode.nodeVector;
     }
+
     void AssignGrid()
     {
         tiles = new TileType[mapLength][];
@@ -65,7 +71,7 @@ public class MapMaker : MonoBehaviour
     void GenerateLakes()
     {
         lakes = new Lakes[lakePieces.Randomize];
-        print(lakes.Length);
+
 
         for (int i = 0; i < lakes.Length; i++)
         {
@@ -83,7 +89,7 @@ public class MapMaker : MonoBehaviour
                 }
             }
         }
-        print("Done");
+
     }
     void CreatePathfindingMap()
     {
@@ -115,8 +121,10 @@ public class MapMaker : MonoBehaviour
     //Method basically takes the current vector3 position of an object and transform that into a grid location. 
     public Node NodefromWorldPosition(Vector3 position)
     {
-        int x = Mathf.RoundToInt(position.x/2);
-        int y = Mathf.RoundToInt(position.z/2);
+        int x = Mathf.RoundToInt(position.x / 2);
+        int y = Mathf.RoundToInt(position.z / 2);
+        position.x = x;
+        position.z = y;
         return grid[x, y];
     }
     void CreateGrid()

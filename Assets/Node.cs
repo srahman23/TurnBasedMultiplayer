@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Node {
     public List<Node> graphNode;//List of surrounding nodes for each node. 
     public Node parent;
-
+    public MapMaker mapmaker;
     public bool walkable;
     public Vector3 nodeVector;
 
@@ -31,4 +31,5 @@ public class Node {
             return gCost + hCost;
         }
     }
+    
 }

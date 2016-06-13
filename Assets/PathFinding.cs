@@ -12,9 +12,12 @@ public class PathFinding : MonoBehaviour {
     }
     void Update()
     {
-        if (mapmaker.finished == true)
+        Vector3 targetPos = mapmaker.blag;
+        if (mapmaker.finished)
         {
-            StartCoroutine(FindPath(mapmaker.playerNode.nodeVector, mapmaker.grid[4, 4].nodeVector));
+            print(targetPos);
+            StartCoroutine(FindPath(mapmaker.playerNode.nodeVector, targetPos));
+            
         }
     }
     public void StartFindPath(Vector3 startpos, Vector3 endpos)

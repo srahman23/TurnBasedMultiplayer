@@ -11,7 +11,7 @@ public class UnitMovement : MonoBehaviour {
     public Text texty;
     // Use this for initialization
     void Start() {
-        final = new Vector3(8, 0, 8);
+        
 
     }
     public void MoveTo()
@@ -50,6 +50,15 @@ public class UnitMovement : MonoBehaviour {
         }
         */
     }
+    void Update()
+    {
+        if (mapmaker.finished)
+        {
+            final = mapmaker.grid[10, 10].nodeVector;
+            //final = mapmaker.targetNode.nodeVector;
+        }
+
+    }
     public void Randomize()
     {
 
@@ -65,6 +74,8 @@ public class UnitMovement : MonoBehaviour {
         }
         else
         {
+            print(x + " " + y);
+            print(mapmaker.grid[x, y].nodeVector);
             transform.position = mapmaker.grid[x, y].nodeVector;
             texty.text = "";
         }
