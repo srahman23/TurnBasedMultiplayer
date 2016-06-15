@@ -2,28 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class UnitMovement : MonoBehaviour {
+public class ObjectMovement : MonoBehaviour    {
     public PathFinding pathfinder;
     public MapMaker mapmaker;
     public List<Node> pathNodes = null;
     Node StartNode;
     Vector3 final;
     public Text texty;
-    // Use this for initialization
-    void Start() {
-        
 
-    }
     public void MoveTo()
     {
+
         if (transform.position == final)
         {
+
             texty.text = "Finished!";
             pathNodes = null;
         }
 
         if (pathNodes == null)
         {
+            print("No pathnodes");
             return;
         }
         else if (pathNodes != null)
@@ -31,7 +30,7 @@ public class UnitMovement : MonoBehaviour {
             transform.position = pathNodes[0].nodeVector;
         }
 
-        
+
         /*
         int current = 0;
         while (current < pathNodes.Count - 1)
@@ -52,20 +51,22 @@ public class UnitMovement : MonoBehaviour {
     }
     void Update()
     {
-        if (mapmaker.finished)
+        print("Called");
+        if (mapmaker.finished && mapmaker.targetNode != null)
         {
-            final = mapmaker.grid[10, 10].nodeVector;
-            //final = mapmaker.targetNode.nodeVector;
+            final = mapmaker.targetNode.nodeVector;
+            print(mapmaker.targetNode.nodeVector);
         }
+
 
     }
     public void Randomize()
     {
-
+        print("Called");
         int x = Random.Range(0, 5);
         int y = Random.Range(0, 5);
 
-        
+
 
         if (x == 4 && y == y || x == 2 && y == 4 || x == 2 && y == 3 || x == 2 && y == 2 || x == 2 && y == 1)
         {
@@ -79,6 +80,7 @@ public class UnitMovement : MonoBehaviour {
             transform.position = mapmaker.grid[x, y].nodeVector;
             texty.text = "";
         }
-        
+
     }
+
 }

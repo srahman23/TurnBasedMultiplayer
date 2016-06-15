@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Collections;
 public class PathFinding : MonoBehaviour {
-    public UnitMovement unit;
-    MapMaker mapmaker;
+    public ObjectMovement unit;
     
+
+    MapMaker mapmaker;    
     void Awake()
     {
         mapmaker = GetComponent<MapMaker>();
@@ -12,12 +13,15 @@ public class PathFinding : MonoBehaviour {
     }
     void Update()
     {
-        Vector3 targetPos = mapmaker.blag;
-        if (mapmaker.finished)
+        if(mapmaker != null)
         {
-            print(targetPos);
+
+        }
+        if (mapmaker.finished  &&  mapmaker.targetPlaced == true)
+        {
+            Vector3 targetPos = mapmaker.grid[20,20].nodeVector;
+
             StartCoroutine(FindPath(mapmaker.playerNode.nodeVector, targetPos));
-            
         }
     }
     public void StartFindPath(Vector3 startpos, Vector3 endpos)
@@ -41,7 +45,7 @@ public class PathFinding : MonoBehaviour {
         List<Node> openSet = new List<Node>();
         HashSet<Node> closedSet = new HashSet<Node>();//Hashset is just a fast way to check whether a node is within the list or not.
         openSet.Add(startNode);
-
+        
         while (openSet.Count > 0)
         {
             Node currentNode = openSet[0];
@@ -98,7 +102,7 @@ public class PathFinding : MonoBehaviour {
             path.Add(currentNode);
             currentNode = currentNode.parent;           
         }
-        
+
         path.Reverse();
         unit.pathNodes = path; 
 

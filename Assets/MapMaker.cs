@@ -16,6 +16,7 @@ public class MapMaker : MonoBehaviour
     public List<Node> path;
     public bool finished = false;
     public bool clicked = false;
+    public bool targetPlaced = false;
     public Node[,] grid;
     public Vector3 blag;
     Vector3 position;
@@ -50,11 +51,15 @@ public class MapMaker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       print(target.transform.position);
-       playerNode = NodefromWorldPosition(player.transform.position);
-       targetNode = NodefromWorldPosition(target.transform.position);
-       print(targetNode.nodeVector);
-       blag = targetNode.nodeVector;
+       if(player != null && target != null)
+        {
+            playerNode = NodefromWorldPosition(player.transform.position);
+            targetNode = NodefromWorldPosition(target.transform.position);
+
+            blag = targetNode.nodeVector;
+        }
+
+       
     }
 
     void AssignGrid()
