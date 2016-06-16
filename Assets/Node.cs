@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 
 public class Node {
+    public GameObject currentObj;
     public List<Node> graphNode;//List of surrounding nodes for each node. 
     public Node parent;
     public MapMaker mapmaker;
     public bool walkable;
+    public bool tree = false;
     public Vector3 nodeVector;
+
 
     public int gCost;
     public int hCost;

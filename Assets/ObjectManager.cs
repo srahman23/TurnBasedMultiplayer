@@ -12,9 +12,6 @@ public class ObjectManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.B)){
-            objplacement.SetBuilding(buildings[1]);
-            objplacement.buildingNum = 1; 
-        }
+       
 	}
 }

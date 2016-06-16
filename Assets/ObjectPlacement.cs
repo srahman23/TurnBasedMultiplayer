@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ObjectPlacement : MonoBehaviour {
     public MapMaker mapmaker;
+    ObjectMovement unitmovement;
+    public AttackScript attackScript;
     public int buildingNum;
 
     Transform currentBuilding;
@@ -12,11 +14,13 @@ public class ObjectPlacement : MonoBehaviour {
 
     
 
-    bool placeOn;
+    bool placeOn = false;
+    bool moveOn = false;
+    bool selectOn = false;
 	// Use this for initialization
 	void Start () {
         camera = this.GetComponent<Camera>();
-        placeOn = false;
+        
 	}
 	
 	// Update is called once per frame
@@ -28,15 +32,14 @@ public class ObjectPlacement : MonoBehaviour {
             Vector3 m = Input.mousePosition;
             Vector3 p = camera.ScreenToWorldPoint(m);
             currentBuilding.position = new Vector3(p.x, 0, p.z);
-            currentBuildingNode = mapmaker.NodefromWorldPosition(currentBuilding.position);
-            currentBuildingNode.walkable = false;
+            
 
             switch (buildingNum)
             {
                 case 0:
                     break;
                 case 1:
-                    mapmaker.target = currentBuilding.gameObject;
+        
                     
                     break;
                 default:
@@ -45,19 +48,47 @@ public class ObjectPlacement : MonoBehaviour {
             }
 
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             placeOn ^=true;//Switches from true to false. 
         }
-
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            moveOn ^= true;
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            selectOn ^= true;
+        }
         if (Input.GetButtonDown("Fire1" ) && placeOn == true)
         {
-            
+            currentBuildingNode = mapmaker.NodefromWorldPosition(currentBuilding.position);
+            currentBuildingNode.walkable = false;
             Instantiate(building, currentBuildingNode.nodeVector, Quaternion.identity);
-            mapmaker.targetPlaced = true; 
-            
+
 
         }
+        else if (Input.GetButtonDown("Fire1") && moveOn == true)
+        {
+            currentBuildingNode = mapmaker.NodefromWorldPosition(currentBuilding.position);
+            mapmaker.targetNode = currentBuildingNode;
+
+            unitmovement.MoveTo();
+        }
+        else if (Input.GetButtonDown("Fire1") && selectOn == true)
+        {
+            currentBuildingNode = mapmaker.NodefromWorldPosition(currentBuilding.position);
+            unitmovement = currentBuildingNode.currentObj.GetComponent<ObjectMovement>();
+            currentBuildingNode
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            attackScript.Attack();
+        }
+
+     
+
     }
     public void SetBuilding(GameObject obj)
     {

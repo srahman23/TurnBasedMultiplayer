@@ -17,10 +17,9 @@ public class PathFinding : MonoBehaviour {
         {
 
         }
-        if (mapmaker.finished  &&  mapmaker.targetPlaced == true)
+        if (mapmaker.finished  &&  mapmaker.targetNode != null)
         {
-            Vector3 targetPos = mapmaker.grid[20,20].nodeVector;
-
+            Vector3 targetPos = mapmaker.targetNode.nodeVector;
             StartCoroutine(FindPath(mapmaker.playerNode.nodeVector, targetPos));
         }
     }

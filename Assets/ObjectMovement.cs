@@ -3,13 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 public class ObjectMovement : MonoBehaviour    {
-    public PathFinding pathfinder;
-    public MapMaker mapmaker;
+    PathFinding pathfinder;
+    MapMaker mapmaker;
     public List<Node> pathNodes = null;
-    Node StartNode;
+    Node CurrentNode;
     Vector3 final;
     public Text texty;
-
+    void Awake()
+    {
+        pathfinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<PathFinding>();
+        mapmaker = GameObject.FindGameObjectWithTag("GameManager").GetComponent<MapMaker>();
+    }
     public void MoveTo()
     {
 
@@ -26,7 +30,9 @@ public class ObjectMovement : MonoBehaviour    {
             return;
         }
         else if (pathNodes != null)
+
         {
+            CurrentNode.walkable = true;
             transform.position = pathNodes[0].nodeVector;
         }
 
@@ -51,18 +57,22 @@ public class ObjectMovement : MonoBehaviour    {
     }
     void Update()
     {
-        print("Called");
-        if (mapmaker.finished && mapmaker.targetNode != null)
+        if (mapmaker.finished)
         {
-            final = mapmaker.targetNode.nodeVector;
-            print(mapmaker.targetNode.nodeVector);
+            CurrentNode = mapmaker.NodefromWorldPosition(transform.position);
+            CurrentNode.walkable = false;
+            CurrentNode.currentObj = this.gameObject;
+
+            if (mapmaker.targetNode != null)
+            {
+                final = mapmaker.targetNode.nodeVector;
+            }
         }
 
 
     }
     public void Randomize()
     {
-        print("Called");
         int x = Random.Range(0, 5);
         int y = Random.Range(0, 5);
 

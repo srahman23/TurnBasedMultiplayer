@@ -10,15 +10,15 @@ public class MapMaker : MonoBehaviour
     public GameObject[] floortype;
     public TileType[][] tiles;
     public GameObject player;
-    public GameObject target;
+    public GameObject target = null;
     public Node playerNode;
     public Node targetNode;
     public List<Node> path;
     public bool finished = false;
     public bool clicked = false;
-    public bool targetPlaced = false;
+
     public Node[,] grid;
-    public Vector3 blag;
+
     Vector3 position;
 
     public int mapHeight;
@@ -32,7 +32,15 @@ public class MapMaker : MonoBehaviour
     RandomGen lakeZCoord = new RandomGen(10, 45);
     RandomGen lakeLength = new RandomGen(2, 5);
     RandomGen lakeWidth = new RandomGen(2, 5);
-    
+
+    Forests[] forests; 
+
+    RandomGen TreePieces = new RandomGen(30, 40);
+    RandomGen TreeXCoord = new RandomGen(5, 45);
+    RandomGen TreeZCoord = new RandomGen(5, 45);
+    RandomGen TreeLength = new RandomGen(2, 5);
+    RandomGen TreeWidth = new RandomGen(2, 5);
+
     void Awake()
     {
         pathfinding = GetComponent<PathFinding>();
@@ -43,6 +51,7 @@ public class MapMaker : MonoBehaviour
         AssignGrid();
         CreatePathfindingMap();
         GenerateLakes();
+        GenerateForests();
         CreateGrid();
         GetNeighbours();
         finished = true;
@@ -51,15 +60,11 @@ public class MapMaker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       if(player != null && target != null)
+       if(player != null)
         {
             playerNode = NodefromWorldPosition(player.transform.position);
-            targetNode = NodefromWorldPosition(target.transform.position);
-
-            blag = targetNode.nodeVector;
         }
 
-       
     }
 
     void AssignGrid()
@@ -95,6 +100,27 @@ public class MapMaker : MonoBehaviour
             }
         }
 
+    }
+    void GenerateForests()
+    {
+        forests = new Forests[TreePieces.Randomize];
+
+        for(int i = 0; i < forests.Length; i++)
+        {
+            forests[i] = new Forests();
+            forests[i].SetUpForests(TreeXCoord.Randomize, TreeZCoord.Randomize, TreeLength.Randomize, TreeWidth.Randomize);
+
+            for(int x = 0; x< forests[i].forestLength; x++)
+            {
+                int xCoord = forests[i].xPos + x;
+
+                for (int z = 0; z < forests[i].forestHeight; z++)
+                {
+                    int zCoord = forests[i].zPos + z;
+                    grid[xCoord, zCoord].tree = true;
+                }
+            }
+        }
     }
     void CreatePathfindingMap()
     {
@@ -150,17 +176,27 @@ public class MapMaker : MonoBehaviour
                 float zOffset = (z * 2f);
                 Vector3 position = new Vector3(xOffset, 0, zOffset);
 
-                if (grid[i,j].walkable == true)
+                if (grid[i, j].walkable == true || grid[i,j].tree == true)
                 {
                     GameObject hexTile = Instantiate(floortype[0], position, Quaternion.AngleAxis(90, Vector3.left)) as GameObject;
                     hexTile.transform.parent = this.transform;
                     hexTile.name = "Hextile" + i + j;
                 }
-                else if (grid[i,j].walkable == false)
+
+                else if (grid[i, j].walkable == false && grid[i, j].tree == false)
                 {
+                   
                     GameObject hexTile = Instantiate(floortype[1], position, Quaternion.AngleAxis(90, Vector3.left)) as GameObject;
                     hexTile.transform.parent = this.transform;
                     hexTile.name = "Hextile" + i + j;
+                }
+                if (grid[i, j].tree == true)
+                {
+                    GameObject tree = Instantiate(floortype[2], position, Quaternion.identity) as GameObject;
+                    tree.transform.parent = this.transform;
+                    tree.name = "Tree" + i + j;
+                    grid[i, j].walkable = false;
+
                 }
             }
         }
