@@ -247,5 +247,16 @@ public class MapMaker : MonoBehaviour
             }
         }
     }
-    
+    public void RegenerateMap()
+    {
+        finished = false;
+
+        AssignGrid();
+        CreatePathfindingMap();
+        GenerateLakes();
+        GenerateForests();
+        CreateGrid();
+        GetNeighbours();
+        finished = true;
+    }
 }

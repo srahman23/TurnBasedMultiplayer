@@ -4,7 +4,7 @@ using System.Collections;
 public class AttackScript : MonoBehaviour {
     public AttackScript targetAttack;
     public BuildingScrip buildingscrip;
-
+    public int treeNum;
     PathFinding pathfinder;
     MapMaker mapmaker;
     
@@ -12,7 +12,7 @@ public class AttackScript : MonoBehaviour {
     Vector3 mainPosition;
     Vector3 targetPosition;
 
-    public float unitHealth;
+    public int unitHealth;
 
     float xDif;
     float zDif;
@@ -21,7 +21,6 @@ public class AttackScript : MonoBehaviour {
         unitHealth = 2;
         pathfinder = GameObject.FindGameObjectWithTag("GameManager").GetComponent<PathFinding>();
         mapmaker =   GameObject.FindGameObjectWithTag("GameManager").GetComponent<MapMaker>();
-        targetPosition = targetAttack.transform.position;
     }
 	
 	// Update is called once per frame
@@ -33,7 +32,7 @@ public class AttackScript : MonoBehaviour {
 
         if(unitHealth == 0)
         {
-            buildingscrip.wood += 50;
+            buildingscrip.wood += treeNum;
             Destroy(gameObject);
         }
 
